@@ -1,0 +1,199 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Ignite Template SOLID",
+    "description": "Exmplo de uso do swagger",
+    "version": "1.0.0",
+    "contact": {
+      "email": "matheuscardozo4@gmail.com"
+    }
+  },
+  "paths": {
+    "/users": {
+      "post": {
+        "sumary": "Create user",
+        "tags": [
+          "Users"
+        ],
+        "description": "create a new user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                },
+                "example": {
+                  "name": "Matheus Caldeira",
+                  "email": "matheuscardozo4@gmail.com"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      },
+      "get": {
+        "sumary": "List all users",
+        "tags": [
+          "Users"
+        ],
+        "description": "list all users if user is admin",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "header",
+            "description": "id of user",
+            "schame": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ] ,
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "format": "uuid"
+                      },
+                      "name": {
+                        "type": "string"
+                      },
+                      "email": {
+                        "type": "string"
+                      },
+                      "admin": {
+                        "type": "boolean"
+                      },
+                      "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      },
+                      "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "sumary": "Set a user as admin",
+        "tags": [
+          "Users"
+        ],
+        "description": "Define a user as admin",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id of user",
+            "schame": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "email": {
+                      "type": "string"
+                    },
+                    "admin": {
+                      "type": "boolean"
+                    },
+                    "created_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "updated_at": {
+                      "type": "string",
+                      "format": "date-time"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    },
+    "/users/{user_id}/admin": {
+      "patch": {
+        "sumary": "Set a user as admin",
+        "tags": [
+          "Users"
+        ],
+        "description": "Define a user as admin",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "id of user",
+            "schame": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success"
+          },
+          "400": {
+            "description": "Bad Request"
+          }
+        }
+      }
+    }
+  }
+}
