@@ -1,0 +1,9 @@
+    
+{
+  "extends": ["tslint-config-airbnb"],
+  "indent": [
+    true,
+    "sapces",
+    2
+  ]
+}

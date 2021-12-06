@@ -1,0 +1,81 @@
+app: certificates
+service: certificates
+
+plugins:
+  - serverless-plugin-typescript 
+  - serverless-offline
+  - serverless-dynamodb-local
+
+custom:
+  dynamodb:
+    stages:
+      - dev
+      - local
+    start:
+      port: 8000
+      inMemory: true
+      migrate: true
+
+package:
+  exclude:
+    - config/.env.stg
+    - config/.env.pro
+  include:
+    - config/.env.dev
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  region: sa-east-1
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: '*'
+    - Effect: Allow
+      Action:
+        - dynamodb:*
+      Resource: '*'
+
+functions:
+  createTodo:
+    handler: src/functions/createTodo.handle
+    events:
+      - http:
+          path: /todos/{userId}
+          method: POST
+          cors: true
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:PutItem
+      Resource: 'arn:dynamodb:${self.provider.region}:*:table/todos'
+  getTodos:
+    handler: src/functions/getTodos.handle
+    events:
+      - http:
+          path: /todos/{userId}
+          method: GET
+          cors: true
+    iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+      Resource: 'arn:dynamodb:${self.provider.region}:*:table/todos'
+
+resources:
+  Resources:
+    dbCertificatesUsers:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: todos
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
